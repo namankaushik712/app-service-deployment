@@ -1,21 +1,11 @@
 name: App Service Deployment
 on:
   workflow_dispatch:
-    inputs:
-      subscription_name:
-        description: Subscription Name to be created
-        type: choice
-        required: true
-        options:
-          - dev
-          - staging
-          - prod
 
 env:
-  WEBAPP_NAME: "appavddevuan1"
-  WORKING_DIRECTORY: 'flask'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
+  APP_SRC: 'flask'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
   PYTHON_VERSION: '3.10'        # set the version to use
-  STARTUP_COMMAND: ''           # set this to the startup command required to start the gunicorn server. default it is empty
+#  STARTUP_COMMAND: ''           # set this to the startup command required to start the gunicorn server. default it is empty
 
 permissions:
   id-token: write
@@ -46,10 +36,11 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: flask-app
-          path: '${{ github.workspace }}/flask'
+          path: '${{ github.workspace }}/${{ env.APP_SRC }}'
 
-  Deploy-app:
+  Deploy-app-dev:
     runs-on: ubuntu-latest
+    environment: dev
     needs:
       - build-app
     steps:
@@ -61,7 +52,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: flask-app
-          path: flask
+          path: ${{ env.APP_SRC }}
       - name: Run ls
         run: |
           echo "Files"
@@ -78,6 +69,43 @@ jobs:
           app-name: ${{ env.WEBAPP_NAME }}
           package: ${{ env.WORKING_DIRECTORY }}
           startup-command: ${{ env.STARTUP_COMMAND }}
+      # Azure logout
+      - name: logout
+        run: |
+          az logout
+
+  Deploy-app-prod:
+    runs-on: ubuntu-latest
+    environment: prod
+    needs:
+      - build-app
+    steps:
+      # Azure login
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDS }}
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: flask-app
+          path: ${{ env.APP_SRC }}
+      - name: Run ls
+        run: |
+          echo "Files"
+          ls
+          pwd
+#      - uses: azure/appservice-settings@v1
+#        with:
+#          app-name: ${{ env.WEBAPP_NAME }}
+#          mask-inputs: false
+#          general-settings-json: '{"linuxFxVersion": "PYTHON|${{ env.PYTHON_VERSION }}"}' #'General configuration settings as Key Value pairs'
+      # deploy web app
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.WEBAPP_NAME }}
+          package: ${{ env.APP_SRC }}
+          startup-command: ${{ env.STARTUP_COMMAND }}
+          slot-name: "v2-slot"
       # Azure logout
       - name: logout
         run: |
