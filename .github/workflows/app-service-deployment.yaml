@@ -50,8 +50,9 @@ jobs:
 
   Deploy-app:
     runs-on: ubuntu-latest
+    needs:
+      - build-app
     steps:
-
       # Azure login
       - uses: azure/login@v2
         with:
