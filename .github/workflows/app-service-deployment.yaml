@@ -37,9 +37,6 @@ jobs:
       - name: python install
         working-directory: ${{ env.WORKING_DIRECTORY }}
         run: |
-          echo "Working dir" 
-          pwd
-          
           sudo apt install python${{ env.PYTHON_VERSION }}-venv
           python -m venv --copies antenv
           source antenv/bin/activate
