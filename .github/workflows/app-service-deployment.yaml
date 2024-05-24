@@ -105,7 +105,7 @@ jobs:
           app-name: ${{ vars.WEBAPP_NAME }}
           package: ${{ env.APP_SRC }}
           startup-command: ${{ env.STARTUP_COMMAND }}
-          slot-name: "v2-slot"
+          slot-name: "v1-slot"
       # Azure logout
       - name: logout
         run: |
