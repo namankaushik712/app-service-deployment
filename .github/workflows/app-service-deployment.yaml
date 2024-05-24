@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 jobs:
-  build-and-deploy:
+  build-app:
     runs-on: ubuntu-latest
 #    environment:
     steps:
@@ -42,10 +42,24 @@ jobs:
           source antenv/bin/activate
           pip install setuptools
           pip install -r requirements.txt
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: flask-app
+          path: '${{ github.workspace }}/flask'
+
+  Deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+
       # Azure login
       - uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDS }}
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: flask-app
 #      - uses: azure/appservice-settings@v1
 #        with:
 #          app-name: ${{ env.WEBAPP_NAME }}
