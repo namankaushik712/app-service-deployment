@@ -60,13 +60,13 @@ jobs:
           pwd 
 #      - uses: azure/appservice-settings@v1
 #        with:
-#          app-name: ${{ var.WEBAPP_NAME }}
+#          app-name: ${{ vars.WEBAPP_NAME }}
 #          mask-inputs: false
 #          general-settings-json: '{"linuxFxVersion": "PYTHON|${{ env.PYTHON_VERSION }}"}' #'General configuration settings as Key Value pairs'
       # deploy web app
       - uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ var.WEBAPP_NAME }}
+          app-name: ${{ vars.WEBAPP_NAME }}
           package: ${{ env.APP_SRC }}
           startup-command: ${{ env.STARTUP_COMMAND }}
       # Azure logout
@@ -96,13 +96,13 @@ jobs:
           pwd
 #      - uses: azure/appservice-settings@v1
 #        with:
-#          app-name: ${{ var.WEBAPP_NAME }}
+#          app-name: ${{ vars.WEBAPP_NAME }}
 #          mask-inputs: false
 #          general-settings-json: '{"linuxFxVersion": "PYTHON|${{ env.PYTHON_VERSION }}"}' #'General configuration settings as Key Value pairs'
       # deploy web app
       - uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ var.WEBAPP_NAME }}
+          app-name: ${{ vars.WEBAPP_NAME }}
           package: ${{ env.APP_SRC }}
           startup-command: ${{ env.STARTUP_COMMAND }}
           slot-name: "v2-slot"
