@@ -61,6 +61,11 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: flask-app
+      - name: Run ls
+        run: |
+          echo "Files"
+          ls
+          pwd 
 #      - uses: azure/appservice-settings@v1
 #        with:
 #          app-name: ${{ env.WEBAPP_NAME }}
@@ -70,7 +75,7 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.WEBAPP_NAME }}
-          package: "flask"
+          package: "flask-app"
           startup-command: ${{ env.STARTUP_COMMAND }}
       # Azure logout
       - name: logout
