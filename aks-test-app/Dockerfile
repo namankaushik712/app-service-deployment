@@ -5,7 +5,7 @@ RUN mkdir /code
 WORKDIR /code
 ADD requirements.txt /code/
 RUN pip install -r requirements.txt --no-cache-dir
-ADD ../../docker-django-webapp-linux /code/
+ADD . /code/
 
 # ssh
 ENV SSH_PASSWD "root:Docker!"
