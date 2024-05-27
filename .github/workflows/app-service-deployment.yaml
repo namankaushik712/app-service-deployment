@@ -115,18 +115,16 @@ jobs:
 
   RollbackProdDeployment:
     runs-on: ubuntu-latest
-    environment: production
-    #    needs:
+#    needs:
 #      - Deploy-app-prod
+    env:
+      WEBAPP_NAME: ${{ vars.WEBAPP_NAME }}
+      RG_NAME: ${{ vars.RG_NAME }}
     steps:
-      - name: Env Vars
-        run: |
-          echo "WEBAPP_NAME=${{ vars.WEBAPP_NAME }}" >> $GITHUB_ENV
-          echo "RG_NAME=${{ vars.RG_NAME }}" >> $GITHUB_ENV
       - name: Rollback
         run: |
           echo "Warmup Slot: ${{ env.WARMUP_SLOT }}"
-          echo "RG: $RG_NAME"
+          echo "RG: ${{ env.RG_NAME }}"
           az webapp deployment slot swap \
           --resource-group ${{ env.RG_NAME }} \
           --name ${{ env.WEBAPP_NAME }} \
