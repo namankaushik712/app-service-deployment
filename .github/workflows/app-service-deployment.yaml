@@ -8,6 +8,8 @@ env:
 #  STARTUP_COMMAND: ''           # set this to the startup command required to start the gunicorn server. default it is empty
   WARMUP_SLOT: "v1-slot"
   PRODUCTION_SLOT: "production"
+  WEBAPP_NAME: ${{ vars.WEBAPP_NAME }}
+  RG_NAME: ${{ vars.RG_NAME }}
 
 permissions:
   id-token: write
@@ -117,9 +119,6 @@ jobs:
     runs-on: ubuntu-latest
 #    needs:
 #      - Deploy-app-prod
-    env:
-      WEBAPP_NAME: ${{ vars.WEBAPP_NAME }}
-      RG_NAME: ${{ vars.RG_NAME }}
     steps:
       - name: Rollback
         run: |
