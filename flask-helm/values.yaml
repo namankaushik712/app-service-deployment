@@ -1,0 +1,20 @@
+# Image name for the container
+image: my-docker-image
+
+# Image tag (default: latest)
+imageTag: latest
+
+# Port to expose (container port)
+containerPort: 8080
+
+# Service type (e.g. ClusterIP, LoadBalancer)
+serviceType: ClusterIP
+
+# Resource requests and limits (optional)
+resources:
+  requests:
+    memory: "1Gi"
+    cpu: "1"
+  limits:
+    memory: "2Gi"
+    cpu: "2"

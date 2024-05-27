@@ -1,0 +1,27 @@
+# Deployment definition for the application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+spec:
+  replicas: 1  # Number of replicas (pods)
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image }}:{{ .Values.imageTag }}"
+          port:
+            - containerPort: {{ .Values.containerPort }}
+          resources:
+            {{ if .Values.resources }}
+            requests:
+              {{ toYaml .Values.resources.requests | indent 4 }}
+            limits:
+              {{ toYaml .Values.resources.limits | indent 4 }}
+            {{ end }}
