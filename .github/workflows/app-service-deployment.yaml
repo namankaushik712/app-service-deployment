@@ -14,7 +14,7 @@ permissions:
   contents: read
 
 jobs:
-  build-app:
+  Build-app:
     runs-on: ubuntu-latest
 #    environment:
     steps:
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: dev
     needs:
-      - build-app
+      - Build-app
     steps:
       # Azure login
       - uses: azure/login@v2
@@ -74,7 +74,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: prod
     needs:
-      - build-app
+      - Build-app
     steps:
       # Azure login
       - uses: azure/login@v2
@@ -107,7 +107,7 @@ jobs:
         run: |
           az logout
 
-  RollbackProdDeployment:
+  Rollback-prod-deployment:
     runs-on: ubuntu-latest
     environment: prod-rollback
     needs:
