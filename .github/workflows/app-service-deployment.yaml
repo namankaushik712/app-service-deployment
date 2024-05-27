@@ -35,7 +35,7 @@ jobs:
           pip install setuptools
           pip install -r requirements.txt
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: flask-app
           path: '${{ github.workspace }}/${{ env.APP_SRC }}'
@@ -51,7 +51,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDS }}
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: flask-app
           path: ${{ env.APP_SRC }}
@@ -82,7 +82,7 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDS }}
       - name: Download artifact from build job
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: flask-app
           path: ${{ env.APP_SRC }}
