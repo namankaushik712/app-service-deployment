@@ -59,13 +59,7 @@ jobs:
         run: |
           echo "Files"
           ls
-          pwd 
-#      - uses: azure/appservice-settings@v1
-#        with:
-#          app-name: ${{ vars.WEBAPP_NAME }}
-#          mask-inputs: false
-#          general-settings-json: '{"linuxFxVersion": "PYTHON|${{ env.PYTHON_VERSION }}"}' #'General configuration settings as Key Value pairs'
-      # deploy web app
+          pwd
       - uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ vars.WEBAPP_NAME }}
@@ -115,15 +109,18 @@ jobs:
 
   RollbackProdDeployment:
     runs-on: ubuntu-latest
-    environment: prod
-#    needs:
-#      - Deploy-app-prod
+    environment: prod-rollback
+    needs:
+      - Deploy-app-prod
     steps:
-      - name: Env Vars
+      - name: Export Env Vars
         run: |
           echo "WEBAPP_NAME=${{ vars.WEBAPP_NAME }}" >> $GITHUB_ENV
           echo "RG_NAME=${{ vars.RG_NAME }}" >> $GITHUB_ENV
-      - name: Rollback
+      - uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDS }}
+      - name: Rollback Deployment
         run: |
           echo "Warmup Slot: ${{ env.WARMUP_SLOT }}"
           echo "RG: ${{ env.RG_NAME }}"
@@ -132,3 +129,6 @@ jobs:
           --name ${{ env.WEBAPP_NAME }} \
           --slot ${{ env.PRODUCTION_SLOT }} \
           --target-slot ${{ env.WARMUP_SLOT }}
+      - name: logout
+        run: |
+          az logout
