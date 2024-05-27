@@ -1,0 +1,46 @@
+---
+# Source: flask-helm/templates/service.yaml
+# Service definition for the application
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-helm
+spec:
+  selector:
+    app: flask-helm
+  type: ClusterIP
+  ports:
+    - name: http
+      protocol: TCP
+      port: 8080
+---
+# Source: flask-helm/templates/deployment.yaml
+# Deployment definition for the application
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-helm
+spec:
+  replicas: 1  # Number of replicas (pods)
+  selector:
+    matchLabels:
+      app: flask-helm
+  template:
+    metadata:
+      labels:
+        app: flask-helm
+    spec:
+      containers:
+        - name: flask-helm
+          image: "my-docker-image:latest"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "2"
+              memory: 2Gi
+            requests:
+              cpu: "1"
+              memory: 1Gi
