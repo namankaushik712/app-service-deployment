@@ -41,8 +41,8 @@ jobs:
         uses: Azure/k8s-bake@v3.0.0
         with:
           renderEngine: 'helm'
-          helmChart: "oci://registry-1.docker.io/bitnamicharts/nginx"
-#          overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
+          helmChart: ${{ env.CHART_PATH }}
+          overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
           overrides: |
             replicas:2
           helm-version: 'latest'
@@ -51,7 +51,7 @@ jobs:
         uses: Azure/k8s-deploy@v5.0.0
         with:
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
-#          images: |
-#            ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.PROJECT_NAME }}:latest
+          images: |
+            ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.PROJECT_NAME }}:latest
 #          imagepullsecrets: |
 #            ${{ env.PROJECT_NAME }}
