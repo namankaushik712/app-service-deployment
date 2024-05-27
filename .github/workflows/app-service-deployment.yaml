@@ -6,6 +6,8 @@ env:
   APP_SRC: 'flask'        # set this to the path to your path of working directory inside github repository, defaults to the repository root
   PYTHON_VERSION: '3.10'        # set the version to use
 #  STARTUP_COMMAND: ''           # set this to the startup command required to start the gunicorn server. default it is empty
+  WARMUP_SLOT: "v1-slot"
+  PRODUCTION_SLOT: "production"
 
 permissions:
   id-token: write
@@ -105,8 +107,20 @@ jobs:
           app-name: ${{ vars.WEBAPP_NAME }}
           package: ${{ env.APP_SRC }}
           startup-command: ${{ env.STARTUP_COMMAND }}
-          slot-name: "v1-slot"
+          slot-name: ${{ env.WARMUP_SLOT }}
       # Azure logout
       - name: logout
         run: |
           az logout
+
+  RollbackProdDeployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rollback
+        run: |
+          echo "Warmup Slot: $WARMUP_SLOT"
+          az webapp deployment slot swap \
+          --resource-group your-resource-group \
+          --name ${{ vars.WEBAPP_NAME }} \
+          --slot ${{ env.PRODUCTION_SLOT }} \
+          --target-slot ${{ env.WARMUP_SLOT }}
