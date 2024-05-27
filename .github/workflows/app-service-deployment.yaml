@@ -115,12 +115,16 @@ jobs:
 
   RollbackProdDeployment:
     runs-on: ubuntu-latest
+    env:
+      WEBAPP_NAME: ${{ vars.WEBAPP_NAME }}
+      RG_NAME: ${{ vars.RG_NAME }}
     steps:
       - name: Rollback
         run: |
           echo "Warmup Slot: $WARMUP_SLOT"
+          echo "RG: $RG_NAME"
           az webapp deployment slot swap \
-          --resource-group your-resource-group \
-          --name ${{ vars.WEBAPP_NAME }} \
-          --slot ${{ env.PRODUCTION_SLOT }} \
-          --target-slot ${{ env.WARMUP_SLOT }}
+          --resource-group $RG_NAME \
+          --name $WEBAPP_NAME \
+          --slot $PRODUCTION_SLOT \
+          --target-slot $WARMUP_SLOT
