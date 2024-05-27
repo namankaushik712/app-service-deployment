@@ -8,8 +8,6 @@ env:
 #  STARTUP_COMMAND: ''           # set this to the startup command required to start the gunicorn server. default it is empty
   WARMUP_SLOT: "v1-slot"
   PRODUCTION_SLOT: "production"
-  WEBAPP_NAME: ${{ vars.WEBAPP_NAME }}
-  RG_NAME: ${{ vars.RG_NAME }}
 
 permissions:
   id-token: write
@@ -120,10 +118,14 @@ jobs:
 #    needs:
 #      - Deploy-app-prod
     steps:
+      - name: Env Vars
+        run: |
+          echo "WEBAPP_NAME=${{ vars.WEBAPP_NAME }}" >> $GITHUB_ENV
+          echo "RG_NAME=${{ vars.RG_NAME }}" >> $GITHUB_ENV
       - name: Rollback
         run: |
           echo "Warmup Slot: ${{ env.WARMUP_SLOT }}"
-          echo "RG: ${{ env.RG_NAME }}"
+          echo "RG: $RG_NAME"
           az webapp deployment slot swap \
           --resource-group ${{ env.RG_NAME }} \
           --name ${{ env.WEBAPP_NAME }} \
