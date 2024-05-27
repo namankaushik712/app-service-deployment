@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ .Chart.Name }}
 spec:
-  replicas: 1  # Number of replicas (pods)
+  replicas: {{ .Values.replicas }}  # Number of replicas (pods)
   selector:
     matchLabels:
       app: {{ .Chart.Name }}

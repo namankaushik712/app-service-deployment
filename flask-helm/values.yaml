@@ -4,6 +4,8 @@ image: my-docker-image
 # Image tag (default: latest)
 imageTag: latest
 
+replicas: 1
+
 # Port to expose (container port)
 containerPort: 8080
 
