@@ -28,14 +28,6 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDS }}
 
-      - name: Build image on ACR
-        uses: azure/CLI@61bb69d64d613b52663984bf12d6bac8fd7b3cc8
-        with:
-          azcliversion: 2.29.1
-          inlineScript: |
-            az configure --defaults acr=${{ env.AZURE_CONTAINER_REGISTRY }}
-            az acr build -t ${{ env.REGISTRY_URL }}/${{ env.PROJECT_NAME }}:latest -r myregistry ./aks-test-app --platform linux
-
       - name: Gets K8s context
         uses: Azure/aks-set-context@v4.0.0
         with:
