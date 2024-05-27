@@ -115,7 +115,7 @@ jobs:
 
   RollbackProdDeployment:
     runs-on: ubuntu-latest
-    environment: production
+    environment: prod
 #    needs:
 #      - Deploy-app-prod
     steps:
