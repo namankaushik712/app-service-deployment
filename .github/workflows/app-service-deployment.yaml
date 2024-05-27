@@ -127,8 +127,8 @@ jobs:
           az webapp deployment slot swap \
           --resource-group ${{ env.RG_NAME }} \
           --name ${{ env.WEBAPP_NAME }} \
-          --slot ${{ env.PRODUCTION_SLOT }} \
-          --target-slot ${{ env.WARMUP_SLOT }}
+          --slot ${{ env.WARMUP_SLOT }} \
+          --target-slot ${{ env.PRODUCTION_SLOT }}
       - name: logout
         run: |
           az logout
