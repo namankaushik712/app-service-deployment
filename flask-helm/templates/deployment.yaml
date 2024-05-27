@@ -16,10 +16,9 @@ spec:
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image }}:{{ .Values.imageTag }}"
-          port:
-            - containerPort: {{ .Values.containerPort }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+              protocol: TCP
           resources:
-            requests:
-              {{ .Values.resources.requests }}
-            limits:
-              {{ .Values.resources.limits }}
+            {{- toYaml .Values.resources | nindent 12 }}
