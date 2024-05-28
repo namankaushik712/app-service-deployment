@@ -24,10 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up kubelogin for non-interactive login
-        uses: azure/use-kubelogin@v1
-        with:
-          kubelogin-version: 'v0.0.24'
+#      - name: Set up kubelogin for non-interactive login
+#        uses: azure/use-kubelogin@v1
+#        with:
+#          kubelogin-version: 'v0.0.24'
 
       - uses: azure/login@v1
         with:
@@ -37,8 +37,8 @@ jobs:
         with:
           resource-group: ${{ env.AKS_RESOURCE_GROUP }}
           cluster-name: ${{ env.CLUSTER_NAME }}
-          admin: 'false'
-          use-kubelogin: 'true'
+#          admin: 'false'
+#          use-kubelogin: 'true'
 
       - name: Configure deployment
         id: bake
