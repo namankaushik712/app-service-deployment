@@ -8,11 +8,11 @@ permissions:
   actions: read
 
 env:
-  AZURE_CONTAINER_REGISTRY: "helmregistryaks" # set this to the name of your container registry
+  AZURE_CONTAINER_REGISTRY: "akstest03" # set this to the name of your container registry
   PROJECT_NAME: "aks-test-rg"              # set this to your project's name
-  AKS_RESOURCE_GROUP: "aks-helm-test-rg"       # set this to the resource group containing your AKS cluster
-  CLUSTER_NAME: "helm-test-aks"             # set this to the name of your AKS cluster
-  REGISTRY_URL: "helmregistryaks.azurecr.io"            # set this to the URL of your registry
+  AKS_RESOURCE_GROUP: "aks-test-rg"       # set this to the resource group containing your AKS cluster
+  CLUSTER_NAME: "aks-cibg-dev-uan-1"             # set this to the name of your AKS cluster
+  REGISTRY_URL: "akstest03.azurecr.io"            # set this to the URL of your registry
 
   # If you bake using helm:
   CHART_PATH: "flask-helm"                   # set this to the path to your helm file
