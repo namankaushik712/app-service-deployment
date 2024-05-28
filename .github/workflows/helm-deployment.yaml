@@ -24,23 +24,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: azure/login@v2
+      - name: Set up kubelogin for non-interactive login
+        uses: azure/use-kubelogin@v1
+        with:
+          kubelogin-version: 'v0.0.24'
+
+      - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDS }}
 
-      - uses: azure/use-kubelogin@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: azure/aks-set-context@v3
         with:
-          kubelogin-version: 'latest'
-
-      - name: Gets K8s context
-        uses: Azure/aks-set-context@v4.0.0
-        with:
-          creds: ${{ secrets.AZURE_CREDS }}
           resource-group: ${{ env.AKS_RESOURCE_GROUP }}
           cluster-name: ${{ env.CLUSTER_NAME }}
-        id: login
+          admin: 'false'
+          use-kubelogin: 'true'
 
       - name: Configure deployment
         id: bake
@@ -50,7 +48,7 @@ jobs:
           helmChart: ${{ env.CHART_PATH }}
           overrideFiles: ${{ env.CHART_OVERRIDE_PATH }}
           overrides: |
-            replicas: 2
+            replicas: 3
             image: ${{ env.AZURE_CONTAINER_REGISTRY }}.azurecr.io/${{ env.PROJECT_NAME }}
             imageTag: latest
           helm-version: 'latest'
