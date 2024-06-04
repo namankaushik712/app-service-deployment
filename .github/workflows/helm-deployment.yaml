@@ -8,18 +8,12 @@ permissions:
   actions: read
 
 env:
-  AZURE_CONTAINER_REGISTRY: "akstest03" # set this to the name of your container registry
-  PROJECT_NAME: "aks-test-rg"              # set this to your project's name
-  AKS_RESOURCE_GROUP: "aks-test-rg"       # set this to the resource group containing your AKS cluster
-  CLUSTER_NAME: "aks-cibg-dev-uan-1"             # set this to the name of your AKS cluster
-  REGISTRY_URL: "akstest03.azurecr.io"            # set this to the URL of your registry
-
-  # If you bake using helm:
-  CHART_PATH: "flask-helm"                   # set this to the path to your helm file
-  CHART_OVERRIDE_PATH: "flask-helm/values.yaml"     # set this to an array of override file paths
+  PROJECT_NAME: "flask-app"
+  CHART_PATH: "flask-helm"
+  CHART_OVERRIDE_PATH: "flask-helm/values.yaml"
 
 jobs:
-  build:
+  Helm-Deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -29,14 +23,16 @@ jobs:
         with:
           kubelogin-version: 'v0.0.24'
 
-      - uses: azure/login@v1
+      - name: Azure Login
+        uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDS }}
 
-      - uses: azure/aks-set-context@v3
+      - name: Set k8s context
+        uses: azure/aks-set-context@v3
         with:
-          resource-group: ${{ env.AKS_RESOURCE_GROUP }}
-          cluster-name: ${{ env.CLUSTER_NAME }}
+          resource-group: ${{ vars.AKS_RESOURCE_GROUP }}
+          cluster-name: ${{ vars.CLUSTER_NAME }}
           admin: 'false'
           use-kubelogin: 'true'
 
@@ -53,7 +49,7 @@ jobs:
             imageTag: latest
           helm-version: 'latest'
 
-      - name: Deploys application
+      - name: Deploy application
         uses: Azure/k8s-deploy@v5.0.0
         with:
           manifests: ${{ steps.bake.outputs.manifestsBundle }}
